@@ -27,7 +27,7 @@ Version: SmartLog
 #include <stdlib.h>
 
 
-// --- Globale Variablen ---
+// Globale Variablen
 int isHelpParamReq = 0;
 int isFileParamReq = 0;
 int countPatternParamReq = 0;
@@ -37,7 +37,7 @@ int isNoOutputReq = 0;
 char *paramFileName;
 char *pattern[5];
 
-// --- Methode zum Überprüfen, ob eine Datei richtig geöffnet wurde ---
+// Methode zum Überprüfen, ob eine Datei richtig geöffnet wurde
 int checkFile(const FILE *file) {
     if (file == NULL) {
         perror("Fehler beim Öffnen der Datei");
@@ -46,7 +46,7 @@ int checkFile(const FILE *file) {
     return 0;
 }
 
-// --- Befüllung der Check-Variablen und Nutzvariablen mit den Parametern ---
+// Befüllung der Check-Variablen und Nutzvariablen mit den Parametern
 int getParam(const int count, char *params[]) {
     for (int i = 1; i < count; i++) {
         if (strcmp(params[i], "-help") == 0 || strcmp(params[i], "-?") == 0 || strcmp(params[i], "/help") == 0 ||
@@ -93,16 +93,16 @@ int getParam(const int count, char *params[]) {
     return 1;
 }
 
-// --- Methode zur Überprüfung ob erhaltener Zugriff von einem Bot ausgeführt wurde ---
+// Methode zur Überprüfung, ob erhaltener Zugriff von einem Bot ausgeführt wurde
 int contains_pattern(const char *str, const int mode) {
-    const char *str2 = str; // Nur für Suche nach bot
+    const char *str2 = str; // Nur für Suche nach Bot
     int reValuePattern = 0;
 
     if (mode) {
         int pattern_bot_WasFound = 0;
         int pattern_robot_WasFound = 0;
 
-        // --- Durchsucht Datei nach "bot" ---
+        // Durchsucht Datei nach "bot"
         while (*str) {
             if (strncasecmp(str, pattern[0], strlen(pattern[0])) == 0) {
                 pattern_bot_WasFound = 1;
@@ -110,7 +110,7 @@ int contains_pattern(const char *str, const int mode) {
             str++;
         }
 
-        // --- Durchsucht Datei nach "robots.txt" ---
+        // Durchsucht Datei nach "robots.txt"
         while (*str2) {
             const char *pattern_robot = "robots.txt";
             if (!pattern_robot_WasFound && strncasecmp(str2, pattern_robot, strlen(pattern_robot)) == 0) {
@@ -118,7 +118,7 @@ int contains_pattern(const char *str, const int mode) {
                 str2 = str2 + 10;
             } else if (pattern_robot_WasFound) {
                 if (strncasecmp(str2, pattern[0], strlen(pattern[0])) == 0)
-                // Falls "robots.txt" gefunden, wird nach weiterem "bot" gesucht
+                // Falls "robots.txt" gefunden hat, wird nach weiterem "bot" gesucht
                 {
                     return 1;
                 }
@@ -144,7 +144,7 @@ int contains_pattern(const char *str, const int mode) {
     return reValuePattern;
 }
 
-// --- Methode zum Zählen der Zeilen in einer Datei ---
+// Methode zum Zählen der Zeilen in einer Datei
 int count_lines(const char *filename) {
     FILE *file = fopen(filename, "r");
     checkFile(file);
@@ -189,7 +189,7 @@ void outputFile(const char *path) {
 
 void openFileReq(char *paths[], char *important_path) {
 #ifdef _WIN32
-    // --- Öffnen der finalen Dateien ---
+    // Öffnen der finalen Dateien
     printf("Zum Öffnen der gewünschten finalen Log-Datei die jeweilige Taste drücken\n");
     int getchSuccess = 0;
     int isError = 0;
@@ -286,7 +286,7 @@ void exportFilesReq(char dateTime[20]) {
 }
 
 int main(const int argc, char *argv[]) {
-    // --- Konsoleneinstellungen ---
+    // Konsoleneinstellungen
 #ifdef _WIN32
     SetConsoleOutputCP(CP_UTF8);
     system("cls");
@@ -299,7 +299,7 @@ int main(const int argc, char *argv[]) {
         printf("\033[0m");
     }
 
-    // --- File-Variablen ---
+    // File-Variablen
     char *iFilename;
     int debugging_mode = 0;
     int bot_mode = 0;
@@ -312,12 +312,12 @@ int main(const int argc, char *argv[]) {
 #endif
     int countAccess = 0;
 
-    // --- 1-Nano-Sekunde-Struct für Pause erstellt ---
+    // 1-Nano-Sekunde-Struct für Pause erstellt
     struct timespec ts;
     ts.tv_sec = 0;
     ts.tv_nsec = 1;
 
-    // --- Parameter-Überprüfung ---
+    // Parameter-Überprüfung
     if (argc > 1) {
         const int successParams = getParam(argc, argv);
 
@@ -336,7 +336,7 @@ int main(const int argc, char *argv[]) {
             return 0;
         }
 
-        if (isClearLogReq) // Falls Clear-Parameter gesetzt, werden alle Result-Logs gelöscht
+        if (isClearLogReq) // Falls ein Clear-Parameter gesetzt ist, werden alle Result-Logs gelöscht
         {
             char befehl[1024];
 
@@ -360,7 +360,7 @@ int main(const int argc, char *argv[]) {
         if (isFileParamReq) // Falls File-Parameter gesetzt dann auch Variable auf diesen setzen
         {
             iFilename = paramFileName;
-        } else // Wenn kein File-Parameter gesetzt, dann wird das Standard-File (access_log) als Input-File gesetzt
+        } else // Wenn kein File-Parameter gesetzt ist, wird das Standard-File (access_log) als Input-File gesetzt
         {
             iFilename = standard_file_path;
             if (!isNoOutputReq)
@@ -372,7 +372,7 @@ int main(const int argc, char *argv[]) {
             debugging_mode = 1;
         }
 
-        if (countPatternParamReq < 1) // Wenn kein Pattern gewählt, dann wird Bot-Pattern ausgewählt
+        if (countPatternParamReq < 1) // Wenn kein Pattern gewählt ist, wird Bot-Pattern ausgewählt
         {
             bot_mode = 1;
             pattern[0] = "bot";
@@ -388,7 +388,7 @@ int main(const int argc, char *argv[]) {
             printf("Kein \033[36;1mFile-Parameter\033[0m => \033[32;1mStandard-File\033[0m wurde ausgewählt!\n");
     }
 
-    // --- Emblem-Darstellung ---
+    // Emblem-Darstellung
     if (!isNoOutputReq) {
         char *emblem_file_path = "C:\\win\\SmartLog\\Emblem.txt";
         outputFile(emblem_file_path);
@@ -396,7 +396,7 @@ int main(const int argc, char *argv[]) {
     if (debugging_mode) {
         printf("Debugging-Modus aktiviert\n");
     }
-    // --- Öffnen der Files ---
+    // Öffnen der Files
     const time_t now = time(NULL);
     const struct tm *t = localtime(&now);
     char dateTime[20];
@@ -433,7 +433,7 @@ int main(const int argc, char *argv[]) {
 
     FILE *oFile = fopen(important_log_path, "w");
     FILE *iFile = fopen(iFilename, "r");
-    int countFile = count_lines(iFilename);
+    const int countFile = count_lines(iFilename);
 
     if (iFile == NULL) {
         fprintf(stderr, "\033[31;1mError\033[0m: Die Datei \033[32;1m'%s'\033[0m konnte nicht geöffnet werden.\n",
@@ -447,7 +447,7 @@ int main(const int argc, char *argv[]) {
     if (!isNoOutputReq) {
         printf("Datei \033[32;1m'%s'\033[0m erfolgreich geöffnet.\n", iFilename);
 
-        // --- Zähler auf der Console für bearbeitete Zugriffe ---
+        // Zähler auf der Console für bearbeitete Zugriffe
         printf("\nAnzahl identifizierter Zugriffe: \033[33;1m0\033[0m");
     }
 #ifdef _WIN32
@@ -470,7 +470,7 @@ int main(const int argc, char *argv[]) {
         countAccess++;
 
         if (!isNoOutputReq) {
-            if (countAccess % 100 == 0) // Jeden 100. Zugriffe ausgeben (kann geändert werden)
+            if (countAccess % 100 == 0) // Jeden 100. Zugriff ausgeben (kann geändert werden)
             {
                 printf("\rAnzahl identifizierter Zugriffe: \033[33;1m%d\033[0m", countAccess);
                 fflush(stdout);
@@ -485,7 +485,7 @@ int main(const int argc, char *argv[]) {
     fclose(iFile);
     fclose(oFile);
 
-    // --- Ergebnis-Ausgabe ---
+    // Ergebnis-Ausgabe
     if (!isNoOutputReq) {
         printf("\033[31;1;4m"
             "\nErgebnis:\n"
